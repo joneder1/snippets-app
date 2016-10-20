@@ -1,0 +1,6 @@
+ERROR:root:FIXME: Unimplemented - put('list', 'A sequence of things - created using []')
+ERROR:root:FIXME: Unimplemented - get('list')
+ERROR:root:FIXME: Unimplemented - put('booleans', 'A boolean data type can only ever be True or False')
+ERROR:root:FIXME: Unimplemented - put('strings', 'A series of chracters')
+ERROR:root:FIXME: Unimplemented - put('sets', 'Sets are like lists that only allow unique entries - created using set() or {}')
+ERROR:root:FIXME: Unimplemented - put('dictionaries', 'Dictionary data structure simply associates one value with another, definitions are stored inside the dictionary')
