@@ -29,7 +29,6 @@ def get(name):
     command = "select 'name', 'snippet' from snippets where 'name' = (%s)"
     cursor.execute(command, (name, ))
     snippet = cursor.fetchone()
-    #SELECT * FROM tbl WHERE username = 'morten'
     connection.commit()
     logging.debug("Snippet retrieved successfully.")
     #do I return snippet? why is "" blank?
