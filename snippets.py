@@ -1,16 +1,21 @@
 import logging
 import argparse
-
+import psycopg2
 
 # Set the log output file, and the log level
 logging.basicConfig(filename="snippets.log", level=logging.DEBUG)
+logging.debug("Connecting to PostgreSQL")
+connection = psycopg2.connect(database="snippets")
+logging.debug("Database connection established.")
 
 def put(name, snippet):
-    """
-    Store a snippet with an associated name.
-    Returns the name and the snippet
-    """
-    logging.error("FIXME: Unimplemented - put({!r}, {!r})".format(name, snippet))
+    """Store a snippet with an associated name."""
+    logging.info("Storing snippet {!r}: {!r}".format(name, snippet))
+    cursor = connection.cursor()
+    command = "insert into snippets values (%s, %s)"
+    cursor.execute(command, (name, snippet))
+    connection.commit()
+    logging.debug("Snippet stored successfully.")
     return name, snippet
     
 def get(name):
@@ -18,8 +23,18 @@ def get(name):
     If there is no such snippet, return '404: Snippet Not Found'.
     Returns the snippet.
     """
-    logging.error("FIXME: Unimplemented - get({!r})".format(name))
-    return ""
+    logging.info("Getting snippet {!r}".format(name))
+    cursor = connection.cursor()
+    #what is going on here? - "column not found" if not using ''
+    command = "select 'name', 'snippet' from snippets where 'name' = (%s)"
+    cursor.execute(command, (name, ))
+    snippet = cursor.fetchone()
+    #SELECT * FROM tbl WHERE username = 'morten'
+    connection.commit()
+    logging.debug("Snippet retrieved successfully.")
+    #do I return snippet? why is "" blank?
+    return snippet
+    
     
 def main():
     """Main function"""
