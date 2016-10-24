@@ -25,14 +25,12 @@ def get(name):
     """
     logging.info("Getting snippet {!r}".format(name))
     cursor = connection.cursor()
-    #what is going on here? - "column not found" if not using ''
-    command = "select 'name', 'snippet' from snippets where 'name' = (%s)"
+    command = "select keyword, message from snippets where keyword = (%s)"
     cursor.execute(command, (name, ))
-    snippet = cursor.fetchone()
-    connection.commit()
+    message = cursor.fetchone()
     logging.debug("Snippet retrieved successfully.")
     #do I return snippet? why is "" blank?
-    return snippet
+    return message[1]
     
     
 def main():
