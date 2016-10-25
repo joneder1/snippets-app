@@ -25,12 +25,11 @@ def get(name):
     """
     logging.info("Getting snippet {!r}".format(name))
     cursor = connection.cursor()
-    command = "select keyword, message from snippets where keyword = (%s)"
+    command = "select message from snippets where keyword = (%s)"
     cursor.execute(command, (name, ))
     message = cursor.fetchone()
     logging.debug("Snippet retrieved successfully.")
-    #do I return snippet? why is "" blank?
-    return message[1]
+    return message[0]
     
     
 def main():
