@@ -13,7 +13,13 @@ def put(name, snippet):
     logging.info("Storing snippet {!r}: {!r}".format(name, snippet))
     cursor = connection.cursor()
     command = "insert into snippets values (%s, %s)"
-    cursor.execute(command, (name, snippet))
+    try:
+        command = "insert into snippets values (%s, %s)"
+        cursor.execute(command, (name, snippet))
+    except psycopg2.IntegrityError as e:
+        connection.rollback()
+        command = "update snippets set message=%s where keyword=%s"
+        cursor.execute(command, (snippet, name))
     connection.commit()
     logging.debug("Snippet stored successfully.")
     return name, snippet
