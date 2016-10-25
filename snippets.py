@@ -47,6 +47,17 @@ def catalog():
         print (keyword)
     logging.debug("Query complete")
     
+def search(string):
+    """Return list of snippets which contain a given string anywhere in their messages"""
+    logging.info("Searching snippets for {}".format(string))
+    with connection.cursor() as cursor:
+        cursor.execute("select * from snippets where message like '%%'||%s||'%%'", (string,))
+        rows = cursor.fetchall()
+        for row in rows:
+            message = row[1]
+            print (message)
+    logging.debug("Search complete")
+    
 def main():
     """Main function"""
     logging.info("Constructing parser")
@@ -66,7 +77,10 @@ def main():
     # Subparser for the catalog command
     logging.debug("Constructing catalog subparser")
     subparsers.add_parser("catalog", help="Query snippet keywords")
-    
+    # Subparser for the search command
+    logging.debug("Constructing search subparser")
+    search_parser = subparsers.add_parser("search", help="Search snippets for a string")
+    search_parser.add_argument("string", help="The string you are searching for")
     arguments = parser.parse_args()
     # Convert parsed arguments from Namespace to dictionary
     arguments = vars(arguments)
@@ -81,7 +95,11 @@ def main():
     elif command == "catalog":
         catalog()
         print("Retrieved keywords")
+    elif command == "search":
+        search(**arguments)
+        print("Search complete")
+        # receiving Found <function search at 0x7fa710afff28> in these messages, do I need to use __repr__?
+        print("Found {!r} in these messages".format(search))
 
 if __name__ == "__main__":
     main()
-    
