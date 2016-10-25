@@ -29,6 +29,9 @@ def get(name):
     cursor.execute(command, (name, ))
     message = cursor.fetchone()
     logging.debug("Snippet retrieved successfully.")
+    if not message:
+        # No snippet was found with that name.
+        return "404: Snippet Not Found"
     return message[0]
     
     
